@@ -1,0 +1,8 @@
+build_*/
+output/
+*.log
+*.out
+dist/
+installer/redist/
+docs/ENTWICKLUNG.md
+test/

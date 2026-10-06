@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage
+    SchemaVersion="1.0"
+    AutodeskProduct="3ds Max"
+    ProductType="Application"
+    Name="NSImport"
+    Description="Naruto to Boruto: Shinobi Striker Importer"
+    AppVersion="0.1.0"
+    FriendlyVersion="0.1.0"
+    Author="DH"
+    UpgradeCode="{6FC1B273-7D03-4818-B1E0-C228C76DE951}"
+    ProductCode="{A57E3661-A865-45BC-A5F7-69409C89B44F}">
+
+    <!-- UpgradeCode bleibt fuer immer; ProductCode bei jeder Aenderung neu. -->
+
+    <CompanyDetails Name="DH" />
+    <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2016" SeriesMax="2027" />
+
+    <!-- Je Max-Jahrgang ein Block, jede .dlu gegen ihr eigenes SDK gebaut.
+         Fehlt die .dlu eines Jahrgangs, laedt Max dort einfach nichts. -->
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2016" SeriesMax="2016" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2016/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2017" SeriesMax="2017" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2017/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2018" SeriesMax="2018" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2018/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2019" SeriesMax="2019" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2019/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2020" SeriesMax="2020" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2020/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2021" SeriesMax="2021" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2021/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2022" SeriesMax="2022" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2022/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2023" SeriesMax="2023" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2023/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2024" SeriesMax="2024" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2024/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2025" SeriesMax="2025" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2025/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2026" SeriesMax="2026" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2026/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="plugins parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2027" SeriesMax="2027" />
+        <ComponentEntry AppName="NSImport" Version="0.1.0"
+                        ModuleName="./Contents/2027/NSImport.dlu"
+                        AppDescription="Shinobi Striker Importer (character + animation windows)" />
+    </Components>
+
+    <Components Description="macroscripts parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2016" SeriesMax="2027" />
+        <ComponentEntry AppName="NSImportMacro" Version="0.1.0"
+                        ModuleName="./Contents/MacroScripts/NSImport.mcr"
+                        AppDescription="Menu commands Import Shinobi Striker / Shinobi Striker Animations" />
+    </Components>
+
+    <!-- Bis 2024 menuMan, braucht die fertige Oberflaeche: post-start-up. -->
+    <Components Description="post-start-up scripts parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2016" SeriesMax="2024" />
+        <ComponentEntry AppName="NSImportMenuLegacy" Version="0.1.0"
+                        ModuleName="./Contents/Post-Start-Up_Scripts/NSMenu_2016_2024.ms"
+                        AppDescription="Menu Shinobi Striker Tool (menuMan, up to 2024)" />
+    </Components>
+
+    <!-- Ab 2025 PRE-start-up: #cuiRegisterMenus muss vor dem Menueaufbau angemeldet sein. -->
+    <Components Description="pre-start-up scripts parts">
+        <RuntimeRequirements OS="Win64" Platform="3ds Max" SeriesMin="2025" SeriesMax="2027" />
+        <ComponentEntry AppName="NSImportMenu" Version="0.1.0"
+                        ModuleName="./Contents/Pre-Start-Up_Scripts/NSMenu_2025_2027.ms"
+                        AppDescription="Menu Shinobi Striker Tool (CuiMenuManager, 2025+)" />
+    </Components>
+</ApplicationPackage>

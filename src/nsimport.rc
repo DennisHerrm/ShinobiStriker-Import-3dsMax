@@ -1,0 +1,99 @@
+// ============================================================
+//  nsimport.rc - die beiden Fenster (Aufbau wie beim SWBF2/TFU2 Import)
+//
+//  Masse in Dialogeinheiten (DLU), damit alles mit Schrift und
+//  Anzeigeskalierung mitwaechst. Abstaende nach Microsofts
+//  Layoutregeln: Rand 7, verwandte Elemente 4, unverwandte 7.
+//  Nur ASCII - rc.exe liest es dann sicher.
+// ============================================================
+#include <windows.h>
+#include "nsimport_res.h"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+IDD_FIGUREN DIALOGEX 0, 0, 440, 306
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "Shinobi Striker Import"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "Game folder", IDC_ORDNER_LABEL, 7, 10, 44, 8
+    LTEXT           "", IDC_ORDNER, 54, 10, 316, 8, SS_PATHELLIPSIS | SS_NOPREFIX
+    PUSHBUTTON      "Browse...", IDC_DURCHSUCHEN, 376, 6, 57, 15, BS_OWNERDRAW | WS_TABSTOP
+    CONTROL         "", IDC_STATUS, "Static", SS_OWNERDRAW, 7, 26, 426, 16
+
+    PUSHBUTTON      "Characters", IDC_TAB0, 7, 48, 70, 15, BS_OWNERDRAW | WS_TABSTOP | WS_GROUP
+    PUSHBUTTON      "Hero meshes", IDC_TAB1, 81, 48, 64, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Avatar parts", IDC_TAB2, 149, 48, 80, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Weapons + items", IDC_TAB3, 233, 48, 80, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Other", IDC_TAB4, 317, 48, 52, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "All meshes", IDC_TAB5, 373, 48, 60, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Textures", IDC_TEXTUREN, 376, 68, 57, 15, BS_OWNERDRAW | WS_TABSTOP
+
+    LTEXT           "Search", IDC_SUCHE_LABEL, 7, 71, 30, 8
+    EDITTEXT        IDC_SUCHE, 40, 68, 254, 14, ES_AUTOHSCROLL | WS_TABSTOP | NOT WS_BORDER
+    RTEXT           "", IDC_ANZAHL, 298, 71, 72, 8
+
+    LISTBOX         IDC_LISTE, 7, 88, 426, 166, LBS_OWNERDRAWFIXED | LBS_NODATA | LBS_NOTIFY | LBS_EXTENDEDSEL | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP | NOT WS_BORDER
+    LTEXT           "", IDC_DETAIL, 7, 258, 426, 8, SS_NOPREFIX | SS_ENDELLIPSIS
+
+    LTEXT           "", IDC_FUSS, 7, 287, 166, 8, SS_NOPREFIX | SS_ENDELLIPSIS
+    PUSHBUTTON      "Animations...", IDC_ANIMFENSTER, 241, 283, 68, 16, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Import", IDOK, 313, 283, 58, 16, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Close", IDCANCEL, 375, 283, 58, 16, BS_OWNERDRAW | WS_TABSTOP
+END
+
+IDD_ANIMATIONEN DIALOGEX 0, 0, 440, 314
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "Shinobi Striker Animations"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "Character", -1, 8, 10, 38, 10
+    COMBOBOX        IDC_A_FIGUR, 48, 8, 140, 220, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Show", -1, 196, 10, 20, 10
+    COMBOBOX        IDC_A_ZEIGE, 218, 8, 74, 220, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Search", -1, 300, 10, 26, 10
+    EDITTEXT        IDC_A_SUCHE, 328, 9, 104, 11, ES_AUTOHSCROLL | NOT WS_BORDER
+    CONTROL         "", IDC_A_KOPF, "Static", SS_OWNERDRAW, 8, 28, 424, 12
+    LISTBOX         IDC_A_LISTE, 8, 41, 424, 192, LBS_OWNERDRAWFIXED | LBS_NODATA | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP | NOT WS_BORDER
+    CONTROL         "", IDC_A_STATUS, "Static", SS_OWNERDRAW, 8, 238, 424, 16
+    LTEXT           "Sequence", -1, 8, 264, 36, 10
+    COMBOBOX        IDC_A_SEQUENZ, 46, 262, 386, 220, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Gap", -1, 8, 291, 18, 10
+    EDITTEXT        IDC_A_ABSTAND, 28, 290, 22, 11, ES_NUMBER | NOT WS_BORDER
+    LTEXT           "frames", -1, 54, 291, 26, 10
+    PUSHBUTTON      "Note track", IDC_A_NOTIZ, 84, 288, 54, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Root motion", IDC_A_WURZEL, 142, 288, 58, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Load all to timeline", IDC_A_ALLE, 204, 288, 104, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Load", IDC_A_LADEN, 312, 288, 58, 15, BS_OWNERDRAW | WS_TABSTOP
+    PUSHBUTTON      "Close", IDCANCEL, 374, 288, 58, 15, BS_OWNERDRAW | WS_TABSTOP
+END
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,1,0,0
+ PRODUCTVERSION 0,1,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_DLL
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "DH"
+            VALUE "FileDescription", "Shinobi Striker Import - Naruto to Boruto: Shinobi Striker for 3ds Max"
+            VALUE "FileVersion", "0.1.0"
+            VALUE "InternalName", "NSImport"
+            VALUE "OriginalFilename", "NSImport.dlu"
+            VALUE "ProductName", "Shinobi Striker Import"
+            VALUE "ProductVersion", "0.1.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
