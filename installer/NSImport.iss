@@ -18,7 +18,7 @@
 ; ============================================================================
 
 #ifndef AppVer
-  #define AppVer "0.1.0"
+  #define AppVer "0.1.1"
 #endif
 #ifndef PaketDir
   #define PaketDir "..\dist\paket\NSImport"

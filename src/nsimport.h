@@ -22,8 +22,8 @@
 #include <string>
 #include <vector>
 
-#define NSIMPORT_VERSION      10
-#define NSIMPORT_VERSION_STR  _T("0.1.0")
+#define NSIMPORT_VERSION      11
+#define NSIMPORT_VERSION_STR  _T("0.1.1")
 
 // Einmalig gezogen, nie wieder aendern.
 #define NSIMPORT_SCENE_CLASS_ID  Class_ID(0xb8e14f11, 0xf7674677)
