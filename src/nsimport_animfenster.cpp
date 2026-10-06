@@ -7,9 +7,10 @@
 //  Wurzelbewegung, "Load all to timeline", "Load", "Close".
 //
 //  Show:
-//    Own skeleton   Clips, deren Skelett eines der Figurenteile ist
-//                   (Koerper UND Gesicht - die Gesichtsclips passen auch)
-//    Same folder    Clips unter demselben Characters/<Name>-Ordner
+//    Own clips      Clips aus den Ordnern der Figur selbst (mit passendem Skelett) -
+//                   die DLC9/DLC10-Figuren teilen sich ein Skelett, Zwischensequenzen
+//                   (ML_*) benutzen Heldenskelette
+//    Own skeleton   alle Clips, deren Skelett eines der Figurenteile ist
 //    All            ohne Filter
 // ============================================================
 #include "nsimport.h"
@@ -27,7 +28,7 @@ namespace nsi {
 
 namespace {
 
-const wchar_t* const kZeige[] = { L"Own skeleton", L"Same folder", L"All" };
+const wchar_t* const kZeige[] = { L"Own clips", L"Own skeleton", L"All" };
 
 struct Fenster {
     HWND h = nullptr;
@@ -74,14 +75,34 @@ const SzenenFigur* GewaehlteFigur(const Fenster& f) {
     return (f.figurWahl >= 0 && static_cast<size_t>(f.figurWahl) < f.figuren.size()) ? &f.figuren[static_cast<size_t>(f.figurWahl)] : nullptr;
 }
 
-// "/Game/Characters/Hero/Rig/..." -> "characters/hero/"
-std::string FigurOrdner(const std::string& pfad) {
+// Pfad in Teile ab "characters/" (klein)
+std::vector<std::string> CharTeile(const std::string& pfad) {
+    std::vector<std::string> t;
     const std::string l = ns::Lower(pfad);
     const size_t c = l.find("characters/");
-    if (c == std::string::npos) return std::string();
-    const size_t e = l.find('/', c + 11);
-    return e == std::string::npos ? std::string() : l.substr(c, e - c + 1);
+    if (c == std::string::npos) return t;
+    size_t p = c;
+    while (p <= l.size()) { size_t e = l.find('/', p); if (e == std::string::npos) e = l.size(); t.push_back(l.substr(p, e - p)); p = e + 1; }
+    return t;
 }
+
+// Ordner, deren Clips zu einer Figur gehoeren (Praefixe ab "characters/"):
+//   Held  /Game/Characters/Original/Naruto/...       -> characters/original/naruto/
+//   DLC   /Game/Characters/Original/DLC9/D91/...     -> characters/original/dlc9/d91/ + .../dlc9/dlc9_skeleton/
+//   Avatar /Game/Characters/Custom/...               -> characters/custom/
+void EigeneOrdner(const std::string& meshPaket, std::set<std::string>& aus) {
+    const std::vector<std::string> t = CharTeile(meshPaket);
+    if (t.size() < 3) return;
+    if (t[1] == "custom") { aus.insert("characters/custom/"); return; }
+    if (t.size() < 4) return;
+    std::string o = t[0] + "/" + t[1] + "/" + t[2] + "/";
+    if (t[2].rfind("dlc", 0) == 0 && t.size() >= 5 && t[3] != "meshes") {
+        aus.insert(o + t[2] + "_skeleton/");                 // gemeinsame Grundbewegungen des DLC-Pakets
+        o += t[3] + "/";
+    }
+    aus.insert(o);
+}
+
 
 // ------------------------------------------------------------
 //  Liste fuellen
@@ -96,23 +117,37 @@ void Fuelle(Fenster& f) {
         int zeige = f.zeige;
         std::set<std::string> skelette;
         std::set<std::string> ordner;
-        if (sf != nullptr)
-            for (const std::string& s : sf->skelette) {
-                skelette.insert(ns::Lower(s));
-                const std::string o = FigurOrdner(s);
-                if (!o.empty()) ordner.insert(o);
-            }
+        if (sf != nullptr) {
+            for (const std::string& s : sf->skelette) skelette.insert(ns::Lower(s));
+            for (const std::string& m : sf->meshes) EigeneOrdner(m, ordner);
+            if (ordner.empty())          // Figur aus einer aelteren Fassung ohne ns_mesh: Skelett-Ordner
+                for (const std::string& s : sf->skelette) EigeneOrdner(s, ordner);
+        }
         if (zeige != 2 && sf == nullptr) {
             zeige = 2;
             hinweis = L"No Shinobi Striker character in the scene - showing all clips. Import a character first.";
         }
+        auto passt = [&](const ns::AnimEintrag& a, int modus) {
+            if (modus != 2 && !skelette.count(ns::Lower(a.skeleton))) return false;
+            if (modus != 0) return true;
+            // nur Clips aus den Ordnern der Figur selbst (andere Figuren teilen sich teils ein Skelett)
+            std::string pfad;
+            for (const std::string& s : CharTeile(a.file)) pfad += s + "/";
+            for (const std::string& o : ordner) if (pfad.rfind(o, 0) == 0) return true;
+            return false;
+        };
+        if (zeige == 0) {
+            // Figuren ohne eigenen Animationsordner (Beschwoerungen, Ninjutsu-Figuren): alle Clips des Skeletts
+            bool irgendeiner = false;
+            for (const ns::AnimEintrag& a : f.katalog->anims) if (passt(a, 0)) { irgendeiner = true; break; }
+            if (!irgendeiner) {
+                zeige = 1;
+                hinweis = L"no clips in the character's own folder - showing every clip on its skeleton";
+            }
+        }
         for (size_t i = 0; i < f.katalog->anims.size(); ++i) {
             const ns::AnimEintrag& a = f.katalog->anims[i];
-            if (zeige == 0 && !skelette.count(ns::Lower(a.skeleton))) continue;
-            if (zeige == 1) {
-                const std::string o = FigurOrdner(a.file);
-                if (o.empty() || !ordner.count(o)) continue;
-            }
+            if (!passt(a, zeige)) continue;
             const std::string k = ns::Lower(a.file);
             bool alle = true;
             for (const std::string& w : woerter) if (k.find(w) == std::string::npos) { alle = false; break; }
@@ -333,7 +368,7 @@ INT_PTR Verarbeite(HWND h, UINT msg, WPARAM wp, LPARAM lp) {
         f->zeige = std::clamp(_wtoi(LiesEinstellung(L"Zeige").c_str()), 0, 2);
         for (const wchar_t* t : kZeige) SendDlgItemMessageW(h, IDC_A_ZEIGE, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(t));
         SendDlgItemMessageW(h, IDC_A_ZEIGE, CB_SETCURSEL, static_cast<WPARAM>(f->zeige), 0);
-        SendDlgItemMessageW(h, IDC_A_SUCHE, EM_SETCUEBANNER, TRUE, reinterpret_cast<LPARAM>(L"e.g.  idle  or  saber"));
+        SendDlgItemMessageW(h, IDC_A_SUCHE, EM_SETCUEBANNER, TRUE, reinterpret_cast<LPARAM>(L"e.g.  idle  or  rasengan"));
         LiesSequenzen(f->sequenzen);
         FuelleSequenzen(*f);
         FuelleFiguren(*f);

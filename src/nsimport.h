@@ -64,6 +64,7 @@ bool ImportiereFigur(ns::Game& g, const std::vector<ns::FigurTeil>& teile, const
 struct SzenenFigur {
     std::string id, name;
     std::vector<std::string> skelette;
+    std::vector<std::string> meshes;      // Paketnamen der Mesh-Teile (fuer den Filter "Own clips")
     size_t knochen = 0;
 };
 std::vector<SzenenFigur> FigurenInSzene();

@@ -947,7 +947,13 @@ std::vector<SzenenFigur> FigurenInSzene() {
     if (ip == nullptr) return aus;
     std::map<std::string, size_t> nachId;
     std::map<std::string, ULONG> neueste;
-    for (INode* n : AlleKnoten(ip)) {
+    std::map<std::string, std::vector<std::string>> meshesJeId;
+    const std::vector<INode*> alle = AlleKnoten(ip);
+    for (INode* n : alle) {
+        const std::string mesh = NodeProp(n, _T("ns_mesh"));
+        if (!mesh.empty()) meshesJeId[NodeProp(n, _T("ns_id"))].push_back(mesh);
+    }
+    for (INode* n : alle) {
         if (NodeProp(n, _T("ns_bone")).empty()) continue;
         const std::string id = NodeProp(n, _T("ns_id"));
         if (id.empty()) continue;
@@ -957,6 +963,7 @@ std::vector<SzenenFigur> FigurenInSzene() {
             f.id = id;
             f.name = NodeProp(n, _T("ns_figur"));
             f.skelette = Trenne(NodeProp(n, _T("ns_skel")));
+            f.meshes = meshesJeId[id];
             it = nachId.emplace(id, aus.size()).first;
             aus.push_back(f);
         }
