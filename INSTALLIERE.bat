@@ -1,7 +1,7 @@
 @echo off
 REM ================================================================
-REM  INSTALLIERE.bat - Paket nach %APPDATA%\Autodesk\ApplicationPlugins
-REM  (nur fuer den angemeldeten Benutzer, keine Adminrechte noetig).
+REM  INSTALLIERE.bat - Paket nach %ProgramData%\Autodesk\ApplicationPlugins
+REM  (fuer alle Benutzer; Benutzer duerfen dort Ordner anlegen, keine Adminrechte noetig).
 REM  Die PackageContents.xml muss DIREKT im Paketordner liegen.
 REM
 REM  Laeuft ein Max-Jahrgang, ist SEINE .dlu gesperrt. Dann wird nur
@@ -11,7 +11,8 @@ REM ================================================================
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
 set "OUTPUT=%~dp0output"
-set "DEST=%APPDATA%\Autodesk\ApplicationPlugins\NSImport"
+set "DEST=%ProgramData%\Autodesk\ApplicationPlugins\NSImport"
+set "ALT=%APPDATA%\Autodesk\ApplicationPlugins\NSImport"
 
 if not exist "%OUTPUT%" (echo FEHLER: output\ fehlt - erst BUILD.bat. & goto ende)
 
@@ -41,5 +42,8 @@ echo       %DEST%
 echo.
 echo In 3ds Max (neu starten): Menue "Shinobi Striker Tool" -^> "Import Shinobi Striker" / "Shinobi Striker Animations"
 echo oder Datei -^> Importieren -^> eine .pak bzw. NARUTO.exe des Spiels.
+REM  alte Installation im Benutzerordner entfernen - sonst laedt Max das Paket zweimal
+if exist "%ALT%" rmdir /s /q "%ALT%" >nul 2>&1
+if exist "%ALT%" echo       ACHTUNG: alte Kopie in %ALT% ist gesperrt ^(Max laeuft^) - nach dem Schliessen erneut ausfuehren
 :ende
 if not "%NS_KEIN_PAUSE%"=="1" pause
